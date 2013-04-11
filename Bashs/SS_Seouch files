@@ -1,0 +1,13 @@
+#!/bin/sh
+
+###################################
+# author: _Mr.yang                #
+# website:note.sdo.com/u/_mr.jian #
+###################################
+
+#删除/root/AwOken*的文件中的回车符，并把追加到新的文件中
+
+for f in /root/.AwOken*
+do
+  tr -d '\r' 2< $f >> newfiles.txt
+done

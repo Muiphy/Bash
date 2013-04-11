@@ -1,0 +1,9 @@
+#!/bin/bash
+die(){
+#这里设置了两个变量的默认值“error变量”and"1参数"	
+	local error=${1:-Undefined error}
+#单die函数没有没有设置参数值时会以默认值出现。
+	echo "$0: $error"
+}
+die "file not found"
+die

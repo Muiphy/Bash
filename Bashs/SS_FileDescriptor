@@ -1,0 +1,18 @@
+#!/bin/bash
+# Let us assign the file descritor to file for output
+#fd # 3 is output file
+#此时的3以代表的是输出文件了
+exec 3> /root/Desktop/tempfiles.txt
+
+#Executes echo commands and # send output to 
+#the file descriptor (fd) # 3 i.e. write output to /tmp/output.txt
+echo "this is a test" >&3
+
+#write date command output to fdd # 3
+date >&3
+
+#Close fd # 3
+exec 3<&-
+
+
+

@@ -1,0 +1,71 @@
+ 
+#!/bin/bash
+#
+# This script will absolutely kill a RHEL/CentOS/Fedora server. Use with extreme caution.
+# Tested with several CentOS/RHEL versions only. Run as root user.
+# 10.20.11 Paul Venezia (pvenezia@pvenezia.com)
+#
+
+zeroscript="/var/ramdisk/zeroscript.sh"
+
+echo "*******************************************************************
+** This will permanently kill this Linux system and erase every  **
+** local disk and filesystem. In other words, you better be      **
+** REALLY REALLY SURE you want to do this on this system.        **
+*******************************************************************"
+echo -n "Are you absolutely sure you want to do this? [yes|no]: "; read yn
+
+if [ -z $yn ] || [ $yn != "yes" ]; then
+echo "Aborting"
+exit 1
+fi
+
+echo -n "How many zeroing passes? "; read zeropass
+if [ -z $zeropass ] || [ $zeropass -lt 1 ]; then
+echo "Invalid number of passes specified. Aborting."
+exit 1
+fi
+
+echo -n "Automatically shutdown? [yes|no] "; read asd
+echo "Okay, here we go..."
+echo "Making and populating ramdisk (512MB)..."
+mkdir -p /var/ramdisk
+mount -t tmpfs none /var/ramdisk -o size=512m # You may need to adjust this depending on the amount of RAM in the box
+mkdir -p /var/ramdisk/var/run
+
+for f in dev bin lib lib64 sbin etc; do 
+cp -pr /$f /var/ramdisk
+done
+
+cp -pr /var/run /var/ramdisk/var
+
+echo "Stopping services, it's probably safe to ignore any errors..."
+
+for s in httpd acpid anacron atd auditd autofs avahi-daemon bluetooth cpuspeed crond cups firstboot gpm haldaemon hidd hplip irqbalance iscsi iscsid kudzu lm_sensors lvm2-monitor mcstrans mdmonitor messagebus microcode_ctl netfs nfslock pcscd portmap rawdevices readahead_early restorecond rpcgssd rpcidmapd sendmail smartd sshd syslog vmware-tools xfs yum-updatesd; do
+service 
+done
+
+echo "Placing zeroing script..."
+echo "#!/bin/bash" > $zeroscript
+
+for i in `fdisk -l | grep Disk | awk '{print$2}' | sed -e s/:// | grep -v /dev/md`; do
+DU=$DU" "$i
+DSK=`basename $i`
+        BLKS=$((`grep -w $DSK /proc/partitions | awk '{print$3}'` * 2)) # account for 512/1k blocksizes
+        BS=512
+        echo "echo \"Zeroing $i (dd if=/dev/zero of=$i bs=$BS count=$BLKS) ...\"" >> $zeroscript
+for (( c=1; c<=$zeropass; c++ )); do
+echo "echo \"Pass $c...\"" >> $zeroscript
+        echo "dd if=/dev/zero of=$i bs=$BS count=$BLKS" >> $zeroscript
+done
+        echo "dd if=/dev/zero of=$i bs=512 count=1" >> $zeroscript # Just to make sure
+done
+echo "echo \"Disk(s)$DU have been zeroed $zeropass times\"" >> $zeroscript
+if [ $asd = 'yes' ]; then
+echo "echo \"Shutting down...\"" >> $zeroscript
+echo "sleep 5 && /sbin/poweroff -n -d -f" >> $zeroscript
+fi
+chmod +x $zeroscript
+echo "Turning off swap..." && swapoff -a
+echo "Entering chroot..."
+chroot /var/ramdisk /`basename $zeroscript`

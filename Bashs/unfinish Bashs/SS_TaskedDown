@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# author: _Mr.yang
+# when this tasked ,shutdown 
+
+echo -n "Plese user inpute prossce named: "
+
+read inpute
+x=8795
+# ss="$(pgrep $inpute | grep $x" = "$x)"
+until "$(pgrep $inpute | grep $x)" = "%x"
+  do
+     echo  "$inpute the prossce is runing"
+     sleep 30s
+  done
+     echo "$inpute the prossce is down"
+
+exit 0
+
+

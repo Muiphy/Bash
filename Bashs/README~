@@ -1,0 +1,30 @@
+author : Linver
+
+this about shell application .
+
+Dialog Box Coad: it's empty folder.
+
+unfineshing Bashs: it's unfinsh bashs files
+
+SS_AddUser: this Script to add a user to Linux system 
+
+SS_All_Rename: this Script Rename jpg and png files
+
+SS_CheckForCmdInPath: this Script Verifies that a specified program is either valid as is,or that it can be found in the PATH directory list.
+
+SS_Crypto-Quto:this Script is crypto games
+
+SS_DefaultValue: this Script is default values on the bash.
+
+SS_DisplayFDS: this Script is assign the file descriptor to  file for input fd # 3 is input file.
+
+SS_find_all_modules: this Script is find all modules on the system.
+
+SS_get-driver: Find all modules and drivers for a given class device.
+
+SS_GetSysInfo: this script is getting System information!
+
+SS_RecordDesktop: A simple shell script wrapper to record current terminal session of a linux
+desktop. May work under other Unix like operating systems too.Tested on RHEL 6.x, Debian 6.x, and Ubuntu Linux
+
+

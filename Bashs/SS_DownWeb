@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# author: _Mr.yang
+# website test scripts
+
+while true;
+do
+   for cycle_temp in `cat websit_url_links`
+     do
+#" lynx -dump `echo ${cycle_temp}` -accept_all_cookies " mean:
+#  dumps the formatted output of the default document or one specified on the command line to standard out.
+#  This can be used in the following way:
+#  lynx -dump http://www.w3.org/
+          if  lynx -dump `echo ${cycle_temp}` -accept_all_cookies | grep "true" ; then
+              echo "The website is running naturally"
+          else
+              echo "${cycle_temp} has been offline please attend it now!" >> /root/Desktop/Temp Files/Bashs/test.txt
+#              mail -v -s "website down mail" guoli0813@163.com < /opt/test.txt
+          fi
+     done
+    sleep 2s
+done

@@ -1,0 +1,17 @@
+ 
+#!/bin/sh 
+
+# auther: network
+# 判断程序是否在运行
+
+while true 
+do 
+ process=`psaux | grepmysqld | grep-vgrep`; 
+ if["$process"==""];then 
+    sleep1; 
+    echo"no process"; 
+ else 
+    echo"process exsits"; 
+    break; 
+ fi 
+done

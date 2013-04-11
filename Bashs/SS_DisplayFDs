@@ -1,0 +1,21 @@
+#!/bin/bash
+#Let us assign the file descriptor to  file for input fd # 3 is input file
+exec 3< /etc/resolv.conf
+
+#Let us assign the file descriptor to file for output fd # 3 is input file
+exec 4> /root/Desktop/tampfiles.txt
+
+#Use read command to read first line of the file
+# 其中a and b 是首选参数变量 "-u"：代表的时文件描述符
+read -u 3 a b
+
+echo "*** My pid is $$"
+mypid=$$
+
+echo "*** Currently open files by $0 scripts.."
+ls -l /proc/$mypid/fd
+
+#Close fd # 3 and # 4
+exec 3<&-
+exec 4<&-
+

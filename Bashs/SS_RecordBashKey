@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Title: Record the keybords to prepare turtorials
+##################################################
+# Author: _Mr.yang                               #
+##################################################
+
+
+
+script -t 2> /tmp/timing.log -a /tmp/output.session
+
+
+# We can replays the sequence of commands execution as as follows:
+# scriptreplay timing.log  output.seesion
